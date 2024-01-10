@@ -7,6 +7,16 @@ const TableOfApplicant = () => {
   const [formDataList, setFormDataList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const getUserType = () => {
+    const usersJSON = localStorage.getItem("users");
+    const userData = JSON.parse(usersJSON);
+    return userData ? userData.userType : null;
+  };
+
+  const isAdmin = getUserType() === "admin";
+  console.log(getUserType());
+
   const deleteApplicant = async (id) => {
     try {
       // Delete the document from Firestore
@@ -123,7 +133,7 @@ const TableOfApplicant = () => {
       10,
       220
     );
-    pdfDoc.text(`Attachments`, 5, 135);
+    pdfDoc.text(`Attachments`, 5, 230);
     pdfDoc.text(`diploma: ${rowData.stage5.diploma}`, 10, 235);
     pdfDoc.text(`passport: ${rowData.stage5.passport}`, 10, 240);
     pdfDoc.text(`transcript: ${rowData.stage5.transcript}`, 10, 245);
@@ -184,7 +194,10 @@ const TableOfApplicant = () => {
                   <td>
                     <button
                       onClick={() => deleteApplicant(applicant.id)}
-                      className="p-2 bg-red-500 rounded-md text-white hover:opacity-80"
+                      disabled={!isAdmin}
+                      className={`p-2 bg-red-500 rounded-md text-white hover:opacity-80 ${
+                        !isAdmin ? "cursor-not-allowed" : ""
+                      }`}
                     >
                       Delete
                     </button>

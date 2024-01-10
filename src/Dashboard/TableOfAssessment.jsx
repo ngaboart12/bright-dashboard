@@ -55,15 +55,128 @@ const TableOfAssessment = () => {
       60,
       5
     );
-    pdfDoc.text(`Person Info`, 5, 20);
+    pdfDoc.text(`Personal Info`, 5, 20);
     pdfDoc.text(`First Name: ${rowData.personInfo.firstName}`, 10, 25);
-    pdfDoc.text(`Last Name: ${rowData.personInfo.middelName}`, 10, 30);
-    pdfDoc.text(`Email: ${rowData.personInfo.lastName}`, 10, 35);
-    pdfDoc.text(`Email: ${rowData.personInfo.dateOfBirth}`, 10, 40);
-    pdfDoc.text(`Email: ${rowData.personInfo.placeOfBirth}`, 10, 45);
-    pdfDoc.text(`Email: ${rowData.personInfo.nationality}`, 10, 50);
-    pdfDoc.text(`Email: ${rowData.personInfo.sex}`, 10, 55);
-    pdfDoc.text(`Email: ${rowData.personInfo.firstLaguage}`, 10, 60);
+    pdfDoc.text(`Last Name: ${rowData.personInfo.lastName}`, 10, 30);
+    pdfDoc.text(`Age: ${rowData.personInfo.Age}`, 10, 40);
+    pdfDoc.text(`Nationlaity: ${rowData.personInfo.nationality}`, 10, 45);
+    pdfDoc.text(
+      `country of residence: ${rowData.personInfo.countryResidence}`,
+      10,
+      50
+    );
+    pdfDoc.text(`Email: ${rowData.personInfo.emailAdrress}`, 10, 55);
+    pdfDoc.text(`phone number: ${rowData.personInfo.phoneNumber}`, 10, 60);
+    pdfDoc.text(
+      `level of education: ${rowData.personInfo.levelOfEducation}`,
+      10,
+      65
+    );
+    pdfDoc.text(
+      `Bank Statement: ${rowData.personInfo.provideBankStatementsEquivalent}`,
+      10,
+      70
+    );
+    pdfDoc.text(
+      `Living expense: ${rowData.personInfo.livingExpensesWhileYouWtudyInCanada}`,
+      10,
+      75
+    );
+    pdfDoc.text(
+      `Letter of Addmission: ${rowData.personInfo.letterOfAdmission}`,
+      10,
+      80
+    );
+
+    pdfDoc.text(`Cannadian`, 5, 85);
+    pdfDoc.text(
+      `First Official laguange: ${rowData.cannadian.firstOfficialLanguage}`,
+      10,
+      90
+    );
+    pdfDoc.text(
+      `-Read proficiency: ${rowData.cannadian.firstReadProficiency}`,
+      15,
+      95
+    );
+    pdfDoc.text(
+      `-Speak proficiency: ${rowData.cannadian.firstSpeakingProficiency}`,
+      15,
+      100
+    );
+    pdfDoc.text(
+      `-Write proficiency: ${rowData.cannadian.firstWritingProficiency}`,
+      15,
+      105
+    );
+    pdfDoc.text(
+      `-Listen proficiency: ${rowData.cannadian.firstListeningProficiency}`,
+      15,
+      110
+    );
+    pdfDoc.text(
+      `-Second Official Language: ${rowData.cannadian.secondOfficialLanguage}`,
+      10,
+      115
+    );
+    pdfDoc.text(
+      `-Read proficiency: ${rowData.cannadian.secondReadProficiency}`,
+      15,
+      120
+    );
+    pdfDoc.text(
+      `-Speak proficiency: ${rowData.cannadian.secondSpeakingProficiency}`,
+      15,
+      125
+    );
+    pdfDoc.text(
+      `-Write proficiency: ${rowData.cannadian.secondWritingProficiency}`,
+      15,
+      130
+    );
+    pdfDoc.text(
+      `-Listen proficiency: ${rowData.cannadian.secondListeningProficiency}`,
+      15,
+      135
+    );
+    pdfDoc.text(`Background Information`, 5, 140);
+    pdfDoc.text(
+      `Have You Refused Visa,${rowData.backgroundInfo.haveYouRefusedVisa}`,
+      10,
+      145
+    );
+    pdfDoc.text(
+      `Valid Student permit,${rowData.backgroundInfo.validStudyPermit}`,
+      10,
+      150
+    );
+    pdfDoc.text(`sponsor,${rowData.backgroundInfo.yourSponsor}`, 10, 155);
+    pdfDoc.text(`Education Program`, 5, 160);
+    pdfDoc.text(
+      `First Program:${rowData.educationProgram.programs[0]}`,
+      10,
+      165
+    );
+    pdfDoc.text(
+      `second Program:${rowData.educationProgram.programs[1]}`,
+      10,
+      170
+    );
+    pdfDoc.text(
+      `third Program:${rowData.educationProgram.programs[2]}`,
+      10,
+      175
+    );
+    pdfDoc.text(`Others`, 5, 180);
+    pdfDoc.text(
+      `First Official language:${rowData.other.FirstofficialLanguage}`,
+      10,
+      185
+    );
+    pdfDoc.text(`Message:${rowData.other.message}`, 10, 190);
+    pdfDoc.text(`Criminal Record:${rowData.other.criminalRecord}`, 10, 195);
+    pdfDoc.text(`serious Condition:${rowData.other.seriousCondition}`, 10, 200);
+
     // Add more data fields as needed
 
     // Save the PDF and open it in a new tab for download

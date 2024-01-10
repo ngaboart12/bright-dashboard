@@ -3,7 +3,7 @@ import { MdDashboard } from "react-icons/md";
 import { FaSchool } from "react-icons/fa";
 import { FaQuestion } from "react-icons/fa";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -27,14 +27,14 @@ const Sidebar = () => {
       >
         <FaSchool /> <span>Appliation</span>
       </a>
-      <a
-        href="/ass"
+      <Link
+        to="/ass"
         className={`${
           pathname === "/ass" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
       >
         <FaQuestion /> <span>Assessment</span>
-      </a>
+      </Link>
       <a
         href="/add"
         className={`${
