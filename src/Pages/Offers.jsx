@@ -45,31 +45,37 @@ const Offers = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+        <label className=" gap-4 flex">
           Offer Name:
           <input
             type="text"
+            placeholder="offer name"
             value={offerName}
+            className="p-2 bg-transparent border-[1px] rounded-[8px] border-black/30 outline-none"
             onChange={(e) => setOfferName(e.target.value)}
           />
         </label>
-        <label>
+        <label className=" gap-4 flex">
           Offer Date:
           <input
             type="text"
+            placeholder="12 jan"
             value={offerDate}
+            className="p-2 bg-transparent border-[1px] rounded-[8px] border-black/30 outline-none"
             onChange={(e) => setOfferDate(e.target.value)}
           />
         </label>
-        <label>
+        <label className=" gap-4 flex items-center">
           Offer Description:
           <textarea
             value={offerDescription}
+            placeholder="Description"
+            className="p-2 bg-transparent border-[1px] rounded-[8px] border-black/30 outline-none"
             onChange={(e) => setOfferDescription(e.target.value)}
           />
         </label>
-        <label>
+        <label className=" gap-4 flex">
           PDF File:
           <input type="file" accept=".pdf" onChange={handleFileChange} />
         </label>

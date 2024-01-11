@@ -14,7 +14,7 @@ const Assessment = () => {
         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Add your dashboard components here */}
           <div className="bg-white/20 p-4 rounded ">
-            <h3 className="text-lg font-semibold mb-2">Apllicants</h3>
+            <h3 className="text-lg font-semibold mb-2">Assessements</h3>
             <TableOfAssessment />
           </div>
 

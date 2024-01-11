@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <div className="w-full flex items-center h-screen justify-center ">
-      <div className="w-1/3 bg-white rounded-md p-4 flex flex-col gap-4 items-center">
+      <div className="w-[90%] md:w-1/3 bg-white rounded-md p-4 flex flex-col gap-4 items-center">
         <h2 className="text-[24px] font-bold">Welcome Again</h2>
         <input
           type="email"

@@ -28,23 +28,23 @@ const Sidebar = () => {
         <FaSchool /> <span>Appliation</span>
       </a>
       <Link
-        to="/ass"
+        to="/admin/ass"
         className={`${
-          pathname === "/ass" ? "bg-blue-500 text-white" : ""
+          pathname === "/admin/ass" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
       >
         <FaQuestion /> <span>Assessment</span>
       </Link>
       <a
-        href="/add"
+        href="/admin/add"
         className={`${
-          pathname === "/add" ? "bg-blue-500 text-white" : ""
+          pathname === "/admin/add" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
       >
         <IoAddCircleSharp /> <span>Add school</span>
       </a>
       <a
-        href="/events"
+        href="/admin/events"
         className={`${
           pathname === "/events" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
@@ -52,7 +52,7 @@ const Sidebar = () => {
         <IoAddCircleSharp /> <span>Add events</span>
       </a>
       <a
-        href="/offers"
+        href="/admin/offers"
         className={`${
           pathname === "/offers" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
