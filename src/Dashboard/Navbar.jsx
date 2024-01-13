@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [userData, setUserData] = useState(null);
+
   const handleLogout = () => {
     // Remove 'users' from local storage
     localStorage.removeItem("users");
@@ -8,14 +10,19 @@ const Navbar = () => {
     // Redirect to the login page (replace with your actual login page URL)
     window.location.href = "/";
   };
-  const [userData, setUserData] = useState(null);
+
   useEffect(() => {
     // Check if the user is logged in when the component mounts
     const userJSON = localStorage.getItem("users");
 
+    // Parse the JSON data
     const userInfo = JSON.parse(userJSON);
-    setUserData(userInfo);
-  });
+
+    // Update the state only if userInfo is not null
+    if (userInfo) {
+      setUserData(userInfo);
+    }
+  }, []); // Empty dependency array to run the effect only once
 
   return (
     <div className="flex flex-row justify-between">

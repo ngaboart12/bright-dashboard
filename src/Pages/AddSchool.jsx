@@ -6,11 +6,13 @@ import { db } from "../../firebase";
 
 const AddSchool = () => {
   const [facultyName, setFacultyName] = useState("");
-  const [school, setSchool] = useState("");
+  const [duration, setDuration] = useState("");
   const [country, setCountry] = useState("");
-  const [schoolFees, setSchoolFees] = useState("");
+  const [tuitionFees, setTuitionFees] = useState("");
+  const [grade, setGrade] = useState("");
   const [faculties, setFaculties] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchFaculties = async () => {
@@ -31,23 +33,30 @@ const AddSchool = () => {
   }, []);
 
   const handleRegister = async () => {
+    setLoading(true);
     try {
       const facultiesRef = collection(db, "faculties");
       await addDoc(facultiesRef, {
         facultyName,
-        school,
+        duration,
         country,
-        schoolFees: parseFloat(schoolFees),
+        grade,
+        tuitionFees: parseFloat(tuitionFees),
       });
 
       console.log("Faculty Registration successful");
+
       // Clear form fields after successful registration
       setFacultyName("");
-      setSchool("");
+      setGrade("");
       setCountry("");
-      setSchoolFees("");
+      setTuitionFees("");
+      setDuration("");
+      setLoading(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error registering faculty:", error.message);
+      setLoading(false);
     }
   };
 
@@ -59,7 +68,6 @@ const AddSchool = () => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     return (
       faculty.facultyName.toLowerCase().includes(lowerCaseSearchTerm) ||
-      faculty.school.toLowerCase().includes(lowerCaseSearchTerm) ||
       faculty.country.toLowerCase().includes(lowerCaseSearchTerm)
     );
   });
@@ -79,13 +87,13 @@ const AddSchool = () => {
           />
         </label>
         <label className="flex flex-col gap-2">
-          School:
+          Duration:
           <input
             className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-            placeholder="Enter school"
+            placeholder="Enter Duration"
             type="text"
-            value={school}
-            onChange={(e) => setSchool(e.target.value)}
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
           />
         </label>
         <label className="flex flex-col gap-2">
@@ -99,20 +107,30 @@ const AddSchool = () => {
           />
         </label>
         <label className="flex flex-col gap-2">
-          School Fees:
+          Grade:
+          <input
+            className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+            type="text"
+            placeholder="Grade"
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+          />
+        </label>
+        <label className="flex flex-col gap-2">
+          Tuition Fees:
           <input
             className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
             type="number"
-            placeholder="School fees"
-            value={schoolFees}
-            onChange={(e) => setSchoolFees(e.target.value)}
+            placeholder="Tuition Fees"
+            value={tuitionFees}
+            onChange={(e) => setTuitionFees(e.target.value)}
           />
         </label>
         <button
           onClick={handleRegister}
           className="h-10 bg-blue-500 mt-8 rounded-md text-white hover:bg-blue-400"
         >
-          Register
+          {loading ? "Loading..." : "Confirm"}
         </button>
       </div>
       {/* 
@@ -143,8 +161,9 @@ const AddSchool = () => {
           <thead>
             <tr>
               <th className="text-start">Faculity name</th>
-              <th className="text-start">School</th>
-              <th className="text-start">School fees</th>
+              <th className="text-start">Duration</th>
+              <th className="text-start">Tuition fees</th>
+              <th className="text-start">Grade</th>
               <th className="text-start">Country</th>
             </tr>
           </thead>
@@ -152,8 +171,9 @@ const AddSchool = () => {
             {faculties.map((item, index) => (
               <tr className="" key={index}>
                 <td className="py-2">{item.facultyName}</td>
-                <td className="py-2">{item.school}</td>
-                <td className="py-2">{item.schoolFees}</td>
+                <td className="py-2">{item.duration} years </td>
+                <td className="py-2">${item.tuitionFees}</td>
+                <td className="py-2">{item.grade}</td>
                 <td className="py-2">{item.country}</td>
               </tr>
             ))}

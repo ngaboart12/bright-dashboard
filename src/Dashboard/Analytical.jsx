@@ -7,6 +7,7 @@ const Analytical = () => {
   const [Applicants, setApplicants] = useState([]);
   const [faculties, setFaculties] = useState([]);
   const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {

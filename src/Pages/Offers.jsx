@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { db, storage } from "../../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadString,
+} from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 
 const Offers = () => {
@@ -8,9 +13,13 @@ const Offers = () => {
   const [offerDate, setOfferDate] = useState("");
   const [offerDescription, setOfferDescription] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
 
   const handleFileChange = (e) => {
     setPdfFile(e.target.files[0]);
+  };
+  const handelPhotChange = (e) => {
+    setPhotoFile(e.target.files[0]);
   };
   const metadata = {
     contentType: "application/pdf",
@@ -28,13 +37,18 @@ const Offers = () => {
     // Get download URL
     const downloadURL = await getDownloadURL(storageRef);
 
-    // Store offer details in Firebase Firestore
+    const photoStorageRef = ref(storage, `photos/${photoFile.name}`);
+    await uploadBytes(photoStorageRef, photoFile);
+
+    // Get Photo download URL
+    const photoDownloadURL = await getDownloadURL(photoStorageRef);
 
     await addDoc(collection(db, "offers"), {
       offerName,
       offerDate,
       offerDescription,
       pdfURL: downloadURL,
+      photoURL: photoDownloadURL,
     });
 
     // Clear form fields
@@ -42,6 +56,7 @@ const Offers = () => {
     setOfferDate("");
     setOfferDescription("");
     setPdfFile(null);
+    setPhotoFile(null);
   };
   return (
     <div>
@@ -78,6 +93,14 @@ const Offers = () => {
         <label className=" gap-4 flex">
           PDF File:
           <input type="file" accept=".pdf" onChange={handleFileChange} />
+        </label>
+        <label className=" gap-4 flex">
+          Offer Photo:
+          <input
+            type="file"
+            accept="image"
+            onChange={(e) => handelPhotChange(e, "photo")}
+          />
         </label>
         <button type="submit">Submit</button>
       </form>
