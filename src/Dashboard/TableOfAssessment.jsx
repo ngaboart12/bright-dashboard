@@ -8,8 +8,19 @@ const TableOfAssessment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const isAdmin = () => {
+    // Check if the user is an admin based on your user info structure
+    const userInfo = localStorage.getItem("users");
+    return userInfo && JSON.parse(userInfo).userType === "admin";
+  };
+
   const deleteAssessment = async (id) => {
     try {
+      if (!isAdmin()) {
+        console.error("User is not authorized to delete assessments.");
+        return;
+      }
+
       // Delete the document from Firestore
       await deleteDoc(doc(db, "assessments", id));
 
@@ -198,7 +209,7 @@ const TableOfAssessment = () => {
                 <th className="text-start">Lastname</th>
                 <th className="text-start">Email</th>
                 <th className="text-start">Faculity</th>
-                <th className="text-start">Operation</th>
+                {isAdmin() && <th className="text-start">Operation</th>}
               </tr>
             </thead>
             <tbody>
@@ -220,7 +231,10 @@ const TableOfAssessment = () => {
                   <td>
                     <button
                       onClick={() => deleteAssessment(applicant.id)}
-                      className="p-2 bg-red-500 rounded-md text-white hover:opacity-80"
+                      className={`p-2 ${
+                        isAdmin() ? "bg-red-500" : "bg-gray-300"
+                      } rounded-md text-white hover:opacity-80`}
+                      disabled={!isAdmin()}
                     >
                       Delete
                     </button>

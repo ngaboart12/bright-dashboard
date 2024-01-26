@@ -14,6 +14,36 @@ const AddSchool = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const getUserInfo = () => {
+    // Retrieve user info from local storage
+    const userInfo = localStorage.getItem("users");
+    return userInfo ? JSON.parse(userInfo) : null;
+  };
+
+  const isAdmin = () => {
+    // Check if the user is an admin based on your user info structure
+    const userInfo = getUserInfo();
+    return userInfo && userInfo.userType === "admin";
+  };
+
+  const handleDelete = async (facultyId) => {
+    setLoading(true);
+    try {
+      const facultyRef = collection(db, "faculties", facultyId);
+      await deleteDoc(facultyRef);
+      console.log("Faculty deleted successfully");
+
+      // Update the local state to reflect the changes
+      setFaculties((prevFaculties) =>
+        prevFaculties.filter((faculty) => faculty.id !== facultyId)
+      );
+    } catch (error) {
+      console.error("Error deleting faculty:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchFaculties = async () => {
       try {
@@ -165,6 +195,7 @@ const AddSchool = () => {
               <th className="text-start">Tuition fees</th>
               <th className="text-start">Grade</th>
               <th className="text-start">Country</th>
+              {isAdmin() && <th className="text-start">Action</th>}
             </tr>
           </thead>
           <tbody>
@@ -175,6 +206,18 @@ const AddSchool = () => {
                 <td className="py-2">${item.tuitionFees}</td>
                 <td className="py-2">{item.grade}</td>
                 <td className="py-2">{item.country}</td>
+                <td className="py-2">
+                  {isAdmin() && (
+                    <td className="py-2">
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="text-red-500 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
