@@ -1,9 +1,10 @@
 import React from "react";
 import { MdDashboard } from "react-icons/md";
 import { FaSchool } from "react-icons/fa";
-import { FaQuestion } from "react-icons/fa";
+import { FaQuestion , FaHeart} from "react-icons/fa";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
+
 
 const Sidebar = () => {
   const location = useLocation();
@@ -46,7 +47,7 @@ const Sidebar = () => {
       <a
         href="/admin/events"
         className={`${
-          pathname === "/events" ? "bg-blue-500 text-white" : ""
+          pathname === "/admin/events" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
       >
         <IoAddCircleSharp /> <span>Add events</span>
@@ -54,10 +55,18 @@ const Sidebar = () => {
       <a
         href="/admin/offers"
         className={`${
-          pathname === "/offers" ? "bg-blue-500 text-white" : ""
+          pathname === "/admin/offers" ? "bg-blue-500 text-white" : ""
         } flex gap-2 items-center p-2 rounded-md`}
       >
         <IoAddCircleSharp /> <span>Offers</span>
+      </a>
+      <a
+        href="/admin/subscription"
+        className={`${
+          pathname === "/admin/subscription" ? "bg-blue-500 text-white" : ""
+        } flex gap-2 items-center p-2 rounded-md`}
+      >
+<FaHeart /><span>Subscription</span>
       </a>
     </div>
   );

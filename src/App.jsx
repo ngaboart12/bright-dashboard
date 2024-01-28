@@ -12,6 +12,7 @@ import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import Admin from "./Pages/Admin";
 import Transfer from "./Pages/Transfer";
+import Subscription from "./Pages/Subscription";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="add" element={<AddSchool />} />
           <Route path="events" element={<AddEvents />} />
           <Route path="offers" element={<Offers />} />
+          <Route path="subscription" element={<Subscription />} />
         </Route>
       </Routes>
     </>
