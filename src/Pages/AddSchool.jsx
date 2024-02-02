@@ -1,5 +1,5 @@
 // FacultyRegistration.jsx
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {addDoc, collection, getDocs, updateDoc, doc  } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { db } from "../../firebase";
 // Assuming db is exported from your firebase.js file
@@ -13,6 +13,28 @@ const AddSchool = () => {
   const [faculties, setFaculties] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
+  const [selectedFaculty, setSelectedFaculty] = useState(null);
+
+
+  const openUpdateModal = (faculty) => {
+    setSelectedFaculty(faculty);
+
+    // Set state variables with existing data
+    setFacultyName(faculty.facultyName);
+    setDuration(faculty.duration);
+    setCountry(faculty.country);
+    setGrade(faculty.grade);
+    setTuitionFees(faculty.tuitionFees);
+
+    setUpdateModalVisible(true);
+  };
+
+  // Function to close the update modal
+  const closeUpdateModal = () => {
+    setSelectedFaculty(null);
+    setUpdateModalVisible(false);
+  };
 
   const getUserInfo = () => {
     // Retrieve user info from local storage
@@ -101,6 +123,32 @@ const AddSchool = () => {
       faculty.country.toLowerCase().includes(lowerCaseSearchTerm)
     );
   });
+
+
+  const handleUpdate = async () => {
+    setLoading(true);
+
+    try {
+      const facultyRef = doc(db, "faculties", selectedFaculty.id);
+      await updateDoc(facultyRef, {
+        facultyName,
+        duration,
+        country,
+        grade,
+        tuitionFees: parseFloat(tuitionFees),
+      });
+
+      console.log("Faculty information updated successfully");
+
+      // Close the modal and reset form fields
+      closeUpdateModal();
+      setLoading(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating faculty information:", error.message);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-10">
@@ -207,15 +255,25 @@ const AddSchool = () => {
                 <td className="py-2">{item.grade}</td>
                 <td className="py-2">{item.country}</td>
                 <td className="py-2">
+                <button
+                        onClick={() => openUpdateModal(item)}
+                        className="text-blue-500 hover:underline mr-2"
+                      >
+                        Edit
+                
+                 </button>
                   {isAdmin() && (
-                    <td className="py-2">
+                    <>
+                    
+                   
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="text-red-500 hover:underline"
-                      >
+                        >
                         Delete
                       </button>
-                    </td>
+                  </>
+                   
                   )}
                 </td>
               </tr>
@@ -223,6 +281,73 @@ const AddSchool = () => {
           </tbody>
         </table>
       </div>
+      {isUpdateModalVisible && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-8 rounded-md w-1/2">
+            <h2 className="text-xl font-semibold mb-4">Update Faculty Information</h2>
+            <div className="grid grid-cols-2 gap-4">
+            <label className="flex flex-col gap-2">
+              Faculty Name:
+              <input
+                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                type="text"
+                value={facultyName}
+                onChange={(e) => setFacultyName(e.target.value)}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              Duration:
+              <input
+                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                type="text"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              Country:
+              <input
+                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                type="text"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              Grade:
+              <input
+                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                type="text"
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              Tuition Fees:
+              <input
+                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                type="number"
+                value={tuitionFees}
+                onChange={(e) => setTuitionFees(e.target.value)}
+              />
+            </label>
+          
+          </div>
+          <button
+              onClick={handleUpdate}
+              className="h-10 bg-blue-500 w-[200px] mt-4 rounded-md text-white hover:bg-blue-400"
+            >
+              {loading ? "Updating..." : "Update"}
+            </button>
+            <button
+              onClick={closeUpdateModal}
+              className="h-10 bg-gray-300 px-20 ml-2 mt-2 rounded-md text-black hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
