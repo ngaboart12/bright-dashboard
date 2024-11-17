@@ -1,5 +1,11 @@
 // FacultyRegistration.jsx
-import {addDoc, collection, getDocs, updateDoc, doc  } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { db } from "../../firebase";
 // Assuming db is exported from your firebase.js file
@@ -9,13 +15,14 @@ const AddSchool = () => {
   const [duration, setDuration] = useState("");
   const [country, setCountry] = useState("");
   const [tuitionFees, setTuitionFees] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirements, setRequirements] = useState("");
   const [grade, setGrade] = useState("");
   const [faculties, setFaculties] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
-
 
   const openUpdateModal = (faculty) => {
     setSelectedFaculty(faculty);
@@ -26,6 +33,8 @@ const AddSchool = () => {
     setCountry(faculty.country);
     setGrade(faculty.grade);
     setTuitionFees(faculty.tuitionFees);
+    setDescription(faculty?.description);
+    setRequirements(faculty?.requirements);
 
     setUpdateModalVisible(true);
   };
@@ -93,7 +102,9 @@ const AddSchool = () => {
         duration,
         country,
         grade,
-        tuitionFees: parseFloat(tuitionFees),
+        tuitionFees: tuitionFees,
+        description,
+        requirements
       });
 
       console.log("Faculty Registration successful");
@@ -103,6 +114,8 @@ const AddSchool = () => {
       setGrade("");
       setCountry("");
       setTuitionFees("");
+      setDescription("");
+      setRequirements("");
       setDuration("");
       setLoading(false);
       window.location.reload();
@@ -124,7 +137,6 @@ const AddSchool = () => {
     );
   });
 
-
   const handleUpdate = async () => {
     setLoading(true);
 
@@ -135,7 +147,9 @@ const AddSchool = () => {
         duration,
         country,
         grade,
-        tuitionFees: parseFloat(tuitionFees),
+        tuitionFees: tuitionFees,
+        description,
+        requirements
       });
 
       console.log("Faculty information updated successfully");
@@ -198,12 +212,30 @@ const AddSchool = () => {
           Tuition Fees:
           <input
             className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-            type="number"
+            type="text"
             placeholder="Tuition Fees"
             value={tuitionFees}
             onChange={(e) => setTuitionFees(e.target.value)}
           />
         </label>
+        <label className="flex flex-col gap-2">
+          Description:
+          <textarea
+            className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+            placeholder="Add description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </label>
+         <label className="flex flex-col gap-2">
+            Requirements:
+              <textarea
+                className="border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                rows={3}
+                value={requirements}
+                onChange={(e) => setRequirements(e.target.value)}
+              />
+            </label>
         <button
           onClick={handleRegister}
           className="h-10 bg-blue-500 mt-8 rounded-md text-white hover:bg-blue-400"
@@ -251,29 +283,25 @@ const AddSchool = () => {
               <tr className="" key={index}>
                 <td className="py-2">{item.facultyName}</td>
                 <td className="py-2">{item.duration} years </td>
-                <td className="py-2">${item.tuitionFees}</td>
+                <td className="py-2">{item.tuitionFees}</td>
                 <td className="py-2">{item.grade}</td>
                 <td className="py-2">{item.country}</td>
                 <td className="py-2">
-                <button
-                        onClick={() => openUpdateModal(item)}
-                        className="text-blue-500 hover:underline mr-2"
-                      >
-                        Edit
-                
-                 </button>
+                  <button
+                    onClick={() => openUpdateModal(item)}
+                    className="text-blue-500 hover:underline mr-2"
+                  >
+                    Edit
+                  </button>
                   {isAdmin() && (
                     <>
-                    
-                   
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="text-red-500 hover:underline"
-                        >
+                      >
                         Delete
                       </button>
-                  </>
-                   
+                    </>
                   )}
                 </td>
               </tr>
@@ -284,56 +312,75 @@ const AddSchool = () => {
       {isUpdateModalVisible && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-8 rounded-md w-1/2">
-            <h2 className="text-xl font-semibold mb-4">Update Faculty Information</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Update Faculty Information
+            </h2>
             <div className="grid grid-cols-2 gap-4">
+              <label className="flex flex-col gap-2">
+                Faculty Name:
+                <input
+                  className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  type="text"
+                  value={facultyName}
+                  onChange={(e) => setFacultyName(e.target.value)}
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                Duration:
+                <input
+                  className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  type="text"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                Country:
+                <input
+                  className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                Grade:
+                <input
+                  className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  type="text"
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                Tuition Fees:
+                <input
+                  className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  type="text"
+                  value={tuitionFees}
+                  onChange={(e) => setTuitionFees(e.target.value)}
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                Description:
+                <textarea
+                  className="border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                  rows={3}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </label>
+            </div>
             <label className="flex flex-col gap-2">
-              Faculty Name:
-              <input
-                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-                type="text"
-                value={facultyName}
-                onChange={(e) => setFacultyName(e.target.value)}
+            Requirements:
+              <textarea
+                className="border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
+                rows={3}
+                value={requirements}
+                onChange={(e) => setRequirements(e.target.value)}
               />
             </label>
-            <label className="flex flex-col gap-2">
-              Duration:
-              <input
-                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-                type="text"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-2">
-              Country:
-              <input
-                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-                type="text"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-2">
-              Grade:
-              <input
-                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-                type="text"
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-2">
-              Tuition Fees:
-              <input
-                className="h-10 border bg-transparent p-2 placeholder:text-black border-gray-400 rounded-md ml-2"
-                type="number"
-                value={tuitionFees}
-                onChange={(e) => setTuitionFees(e.target.value)}
-              />
-            </label>
-          
-          </div>
-          <button
+            <button
               onClick={handleUpdate}
               className="h-10 bg-blue-500 w-[200px] mt-4 rounded-md text-white hover:bg-blue-400"
             >
